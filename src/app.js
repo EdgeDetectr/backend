@@ -1,5 +1,5 @@
 const express = require("express");
-const PORT = process.env.PORT || 3001;
+const PORT = 3001;
 const cors = require("cors");
 
 const operatorRoutes = require("./routes/operators");
@@ -13,7 +13,10 @@ app.get("/", (req, res) => {
   res.send("Welcome to root URL of Server");
 });
 
-app.use("/api/operators", operatorRoutes);
+// app.use("/api/operators", operatorRoutes);
+app.get("/api/operators", (req, res) => {
+  res.status(200).send("Welcome to operators API");
+});
 
 app.listen(PORT, (error) => {
   if (!error)

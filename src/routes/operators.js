@@ -26,8 +26,11 @@ const upload = multer({
 router.post("/:operator", upload.single("file"), (req, res) => {
   const operator = req.params.operator;
   const encodedOperator = encodeURIComponent(operator);
-  const inputPath = path.join(uploadFolder, req.file.filename);
-  const outputPath = path.join(uploadFolder, `output-${req.file.filename}`);
+  const inputFilename = req.file.filename;
+  const outputFilename = `output-${inputFilename}`;
+
+  const inputPath = path.join(uploadFolder, inputFilename);
+  const outputPath = path.join(uploadFolder, outputFilename);
 
   if (!fs.existsSync(inputPath)) {
     return res.status(400).json({ error: "No file uploaded." });
@@ -66,9 +69,11 @@ router.post("/:operator", upload.single("file"), (req, res) => {
       return res.status(500).json({ error: "Processing failed." });
     }
 
+    console.log(inputFilename);
+    console.log(outputFilename);
     res.json({
-      inputImage: `/uploads/${req.file.filename}`,
-      outputImage: `/uploads/output-${req.file.filename}`,
+      inputImage: inputFilename,
+      outputImage: outputFilename,
     });
 
     setTimeout(() => {

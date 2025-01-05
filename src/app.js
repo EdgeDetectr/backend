@@ -13,10 +13,7 @@ app.get("/", (req, res) => {
   res.send("Welcome to root URL of Server");
 });
 
-// app.use("/api/operators", operatorRoutes);
-app.get("/api/operators", (req, res) => {
-  res.status(200).send("Welcome to operators API");
-});
+app.use("/api/operators", operatorRoutes);
 
 app.listen(PORT, (error) => {
   if (!error)

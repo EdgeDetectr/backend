@@ -10,7 +10,6 @@ router.use(cors());
 
 const uploadFolder = path.join(__dirname, "../../uploads");
 
-// Multer storage configuration with unique filenames
 const upload = multer({
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
@@ -36,14 +35,20 @@ router.post("/:operator", upload.single("file"), (req, res) => {
     return res.status(400).json({ error: "No file uploaded." });
   }
 
-  // Define executable path
   const executablePath = path.resolve(__dirname, "../../../operators/build");
   const operatorProcess = path.join(executablePath, "operators");
 
   try {
     process.chdir(executablePath);
   } catch (err) {
-    console.error("Failed to change directory:", err);
+    console.error(
+      "Failed to change directory:",
+      err,
+      "current directory:",
+      __dirname,
+      "executable path:",
+      executablePath
+    );
     return res.status(500).json({ error: "Internal server error." });
   }
 

@@ -8,8 +8,9 @@ const router = express.Router();
 
 router.use(cors());
 
+// Upload folder
 const uploadFolder = path.join(__dirname, "../../uploads");
-
+// Upload multer with unique filename and folder creation if does not exist
 const upload = multer({
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
@@ -22,6 +23,7 @@ const upload = multer({
   }),
 });
 
+// POST /operators/:operator route to process the uploaded image with the operator and saving the output image
 router.post("/:operator", upload.single("file"), (req, res) => {
   const operator = req.params.operator;
   const encodedOperator = encodeURIComponent(operator);

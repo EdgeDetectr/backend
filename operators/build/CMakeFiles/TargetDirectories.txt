@@ -1,0 +1,3 @@
+/Users/kailinx/Desktop/EdgeUnity/backend/operators/build/CMakeFiles/operators.dir
+/Users/kailinx/Desktop/EdgeUnity/backend/operators/build/CMakeFiles/edit_cache.dir
+/Users/kailinx/Desktop/EdgeUnity/backend/operators/build/CMakeFiles/rebuild_cache.dir

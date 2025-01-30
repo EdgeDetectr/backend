@@ -26,6 +26,7 @@ const upload = multer({
 // POST /operators/:operator route to process the uploaded image with the operator and saving the output image
 router.post("/:operator", upload.single("file"), (req, res) => {
   const operator = req.params.operator;
+  console.log("Operator:", operator);
   const encodedOperator = encodeURIComponent(operator);
   const inputFilename = req.file.filename;
   const outputFilename = `output-${inputFilename}`;
@@ -37,8 +38,23 @@ router.post("/:operator", upload.single("file"), (req, res) => {
     return res.status(400).json({ error: "No file uploaded." });
   }
 
-  const executablePath = path.resolve(__dirname, "../../../operators/build");
+  const executablePath =
+    process.env.OPERATOR_PROCESS || __dirname + "/../../operators/build";
+
+  console.log(process.env.OPERATOR_PROCESS);
+
   const operatorProcess = path.join(executablePath, "operators");
+
+  console.log("Processing image with operator:", operator);
+  console.log("Input file:", inputPath);
+  console.log("Output file:", outputPath);
+  console.log("Executable path:", executablePath);
+  console.log("Operator process:", operatorProcess);
+
+  if (!fs.existsSync(operatorProcess)) {
+    console.error("Operator executable not found at:", operatorProcess);
+    return res.status(500).json({ error: "Operator executable not found." });
+  }
 
   try {
     process.chdir(executablePath);
@@ -69,6 +85,7 @@ router.post("/:operator", upload.single("file"), (req, res) => {
   });
 
   cppProcess.on("close", (code) => {
+    console.log("C++ process closed with code:", code);
     process.chdir(__dirname);
 
     if (code !== 0) {
@@ -94,6 +111,7 @@ router.post("/:operator", upload.single("file"), (req, res) => {
   });
 
   cppProcess.on("error", (err) => {
+    console.error("C++ process error:", err);
     process.chdir(__dirname);
     console.error("Failed to start subprocess:", err);
     return res.status(500).json({ error: "Failed to start subprocess." });

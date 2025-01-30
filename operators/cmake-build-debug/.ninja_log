@@ -1,0 +1,9 @@
+# ninja log v6
+19	981	1735527536666200794	CMakeFiles/operators.dir/src/utils/image_utils.cpp.o	9b1de7f214910d4e
+8	1169	1735528578970673145	CMakeFiles/operators.dir/src/gradient/alt_sobel.cpp.o	afad940c4d61575d
+24	1329	1735886806891672762	CMakeFiles/operators.dir/main.cpp.o	36e624ec94cf4e88
+8	1128	1735533946784797688	CMakeFiles/operators.dir/src/gradient/omp_sobel.cpp.o	5b0013a342e08841
+17	982	1735527536664476846	CMakeFiles/operators.dir/src/gradient/sobel.cpp.o	db15aff1a9e8b991
+7	1120	1735528578969837235	CMakeFiles/operators.dir/src/gradient/ocv_sobel.cpp.o	aa420272c10e5e42
+19	548	1735527536666513668	CMakeFiles/operators.dir/src/utils/path_helper.cpp.o	36b2a0e44a475ba2
+1330	1521	1735886808197613531	operators	adc8db59e802f0c3

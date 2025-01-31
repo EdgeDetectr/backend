@@ -1102,4 +1102,4 @@ CMakeFiles/operators.dir/src/gradient/alt_sobel.cpp.o: \
   /opt/homebrew/Cellar/opencv/4.11.0/include/opencv4/opencv2/video.hpp \
   /opt/homebrew/Cellar/opencv/4.11.0/include/opencv4/opencv2/video/tracking.hpp \
   /opt/homebrew/Cellar/opencv/4.11.0/include/opencv4/opencv2/video/background_segm.hpp \
-  /Users/kailinx/Desktop/EdgeUnity/backend/operators/include/../include/utils/sobel_util.h
+  /Users/kailinx/Desktop/EdgeUnity/backend/operators/include/../include/utils/kernels_util.h

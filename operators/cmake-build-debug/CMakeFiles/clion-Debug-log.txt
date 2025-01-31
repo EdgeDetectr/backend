@@ -15,6 +15,6 @@
 -- Found OpenMP_C: -Xclang -fopenmp (found version "5.1")
 -- Found OpenMP_CXX: -Xclang -fopenmp (found version "5.1")
 -- Found OpenMP: TRUE (found version "5.1")
--- Configuring done (2.2s)
+-- Configuring done (2.3s)
 -- Generating done (0.0s)
 -- Build files have been written to: /Users/kailinx/Desktop/EdgeUnity/backend/operators/cmake-build-debug

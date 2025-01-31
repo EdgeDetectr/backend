@@ -1,6 +1,6 @@
 #include "gradient/omp_sobel.h"
 #include "../include/utils/image_utils.h"
-#include "../include/utils/sobel_util.h"
+#include "../include/utils/kernels_util.h"
 using namespace std;
 using namespace cv;
 
@@ -69,18 +69,18 @@ Mat OmpSobel::convertToGrayscale(const Mat& rgbImage) const {
 }
 
 Mat OmpSobel::computeGradientX(const Mat& grayImage) const {
-    int kernelSize = static_cast<int>(SobelUtil::kernelX.size());
+    int kernelSize = static_cast<int>(KernelUtil::sobelX.size());
     int offset = kernelSize / 2;
 
     Mat gradX(height, width, CV_32SC1, Scalar(0));
 
-#pragma omp parallel for default(none) shared(gradX, grayImage, kernelSize, offset) shared(SobelUtil::kernelX) schedule(dynamic)
+#pragma omp parallel for default(none) shared(gradX, grayImage, kernelSize, offset) shared(KernelUtil::sobelX) schedule(dynamic)
     for (int i = offset; i < height - offset; ++i) {
         for (int j = offset; j < width - offset; ++j) {
             int gradient = 0;
             for (int ki = 0; ki < kernelSize; ++ki) {
                 for (int kj = 0; kj < kernelSize; ++kj) {
-                    gradient += SobelUtil::kernelX[ki][kj] * grayImage.at<uint8_t>(i + ki - offset, j + kj - offset);
+                    gradient += KernelUtil::sobelX[ki][kj] * grayImage.at<uint8_t>(i + ki - offset, j + kj - offset);
                 }
             }
             gradX.at<int>(i, j) = static_cast<int>(scale * gradient + delta);
@@ -91,18 +91,18 @@ Mat OmpSobel::computeGradientX(const Mat& grayImage) const {
 }
 
 Mat OmpSobel::computeGradientY(const Mat& grayImage) const {
-    int kernelSize = static_cast<int>(SobelUtil::kernelY.size());
+    int kernelSize = static_cast<int>(KernelUtil::sobelY.size());
     int offset = kernelSize / 2;
 
     Mat gradY(height, width, CV_32SC1, Scalar(0));
 
-#pragma omp parallel for default(none) shared(gradY, grayImage, kernelSize, offset) shared(SobelUtil::kernelY) schedule(dynamic)
+#pragma omp parallel for default(none) shared(gradY, grayImage, kernelSize, offset) shared(KernelUtil::sobelY) schedule(dynamic)
     for (int i = offset; i < height - offset; ++i) {
         for (int j = offset; j < width - offset; ++j) {
             int gradient = 0;
             for (int ki = 0; ki < kernelSize; ++ki) {
                 for (int kj = 0; kj < kernelSize; ++kj) {
-                    gradient += SobelUtil::kernelY[ki][kj] * grayImage.at<uint8_t>(i + ki - offset, j + kj - offset);
+                    gradient += KernelUtil::sobelY[ki][kj] * grayImage.at<uint8_t>(i + ki - offset, j + kj - offset);
                 }
             }
             gradY.at<int>(i, j) = static_cast<int>(scale * gradient + delta);

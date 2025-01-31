@@ -1,7 +1,10 @@
 #include "../../include/gradient/ocv_prewitt.h"
 #include "../include/utils/image_utils.h"
+#include "../include/utils/kernels_util.h"
 
-OcvPrewitt::OcvPrewitt(int kernelSize) : ksize(kernelSize), scale(1), delta(0) {}
+using namespace KernelUtil;
+
+OcvPrewitt::OcvPrewitt() {}
 
 Mat OcvPrewitt::getEdges(const string& inputPath, const string& outputName) {
     clock_t t = clock();
@@ -37,19 +40,13 @@ Mat OcvPrewitt::convertToGrayscale(const Mat& image) {
 
 Mat OcvPrewitt::computeGradientX(const Mat& grayImage) {
     Mat gradX;
-    Mat prewittX = (Mat_<double>(3,3) << -1, 0, 1,
-            -1, 0, 1,
-            -1, 0, 1);
-    filter2D(grayImage, gradX, CV_64F, prewittX);
+    filter2D(grayImage, gradX, CV_64F, KernelUtil::prewittX);
     return gradX;
 }
 
 Mat OcvPrewitt::computeGradientY(const Mat& grayImage) {
     Mat gradY;
-    Mat prewittY = (Mat_<double>(3,3) << -1, -1, -1,
-            0,  0,  0,
-            1,  1,  1);
-    filter2D(grayImage, gradY, CV_64F, prewittY);
+    filter2D(grayImage, gradY, CV_64F, KernelUtil::prewittY);
     return gradY;
 }
 

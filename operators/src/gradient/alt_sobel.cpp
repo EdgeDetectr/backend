@@ -1,6 +1,6 @@
 #include "../include/gradient/alt_sobel.h"
 #include "../include/utils/image_utils.h"
-#include "../include/utils/sobel_util.h"
+#include "../include/utils/kernels_util.h"
 
 AltSobel::AltSobel(int kernelSize) : ksize(kernelSize), scale(1), delta(0) {
     height = 0;
@@ -65,7 +65,7 @@ vector<vector<uint8_t>> AltSobel::convertToGrayscale(const vector<vector<vector<
 }
 
 vector<vector<int>> AltSobel::computeGradientX(const vector<vector<uint8_t>>& grayImage) const {
-    int kernelSize = static_cast<int>(SobelUtil::kernelX.size());
+    int kernelSize = static_cast<int>(KernelUtil::sobelX.size());
     int offset = kernelSize / 2;
 
     vector<vector<int>> gradX(height, vector<int>(width, 0));
@@ -75,7 +75,7 @@ vector<vector<int>> AltSobel::computeGradientX(const vector<vector<uint8_t>>& gr
             int gradient = 0;
             for (int ki = 0; ki < kernelSize; ++ki) {
                 for (int kj = 0; kj < kernelSize; ++kj) {
-                    gradient += SobelUtil::kernelX[ki][kj] * grayImage[i + ki - offset][j + kj - offset];
+                    gradient += KernelUtil::sobelX[ki][kj] * grayImage[i + ki - offset][j + kj - offset];
                 }
             }
             gradX[i][j] = static_cast<int>(scale * gradient + delta);
@@ -86,7 +86,7 @@ vector<vector<int>> AltSobel::computeGradientX(const vector<vector<uint8_t>>& gr
 }
 
 vector<vector<int>> AltSobel::computeGradientY(const vector<vector<uint8_t>>& grayImage) const {
-    int kernelSize = static_cast<int>(SobelUtil::kernelY.size());
+    int kernelSize = static_cast<int>(KernelUtil::sobelY.size());
     int offset = kernelSize / 2;
 
     vector<vector<int>> gradY(height, vector<int>(width, 0));
@@ -96,7 +96,7 @@ vector<vector<int>> AltSobel::computeGradientY(const vector<vector<uint8_t>>& gr
             int gradient = 0;
             for (int ki = 0; ki < kernelSize; ++ki) {
                 for (int kj = 0; kj < kernelSize; ++kj) {
-                    gradient += SobelUtil::kernelY[ki][kj] * grayImage[i + ki - offset][j + kj - offset];
+                    gradient += KernelUtil::sobelY[ki][kj] * grayImage[i + ki - offset][j + kj - offset];
                 }
             }
             gradY[i][j] = static_cast<int>(scale * gradient + delta);

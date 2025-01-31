@@ -4,6 +4,7 @@
 #include "include/gradient/alt_sobel.h"
 #include "include/gradient/omp_sobel.h"
 #include "include/gradient/ocv_prewitt.h"
+#include "include/gradient/ocv_roberts_cross.h"
 using namespace std;
 
 // helper method that applies the operator and gets the edges and onwards.
@@ -49,7 +50,7 @@ int main(int argc, char* argv[]) {
 //    }
 
     string inputPath = "/Users/kailinx/Desktop/EdgeUnity/backend/operators/test/gradient/datasets/image.jpg";
-    list<GradientOperator*> operators = {new OcvSobel(), new AltSobel(), new OmpSobel(), new OcvPrewitt()};
+    list<GradientOperator*> operators = {new OcvSobel(), new AltSobel(), new OmpSobel(), new OcvPrewitt(), new OcvRobertsCross()};
     for (auto& operatorPtr : operators) {
         string outputPath = "/Users/kailinx/Desktop/EdgeUnity/backend/operators/test/gradient/datasets/"+operatorPtr->getOperatorName()+".jpg";
         applyOperator(operatorPtr, inputPath, outputPath);

@@ -177,6 +177,30 @@ src/gradient/alt_sobel.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/operators.dir/build.make CMakeFiles/operators.dir/src/gradient/alt_sobel.cpp.s
 .PHONY : src/gradient/alt_sobel.cpp.s
 
+src/gradient/ocv_prewitt.o: src/gradient/ocv_prewitt.cpp.o
+.PHONY : src/gradient/ocv_prewitt.o
+
+# target to build an object file
+src/gradient/ocv_prewitt.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/operators.dir/build.make CMakeFiles/operators.dir/src/gradient/ocv_prewitt.cpp.o
+.PHONY : src/gradient/ocv_prewitt.cpp.o
+
+src/gradient/ocv_prewitt.i: src/gradient/ocv_prewitt.cpp.i
+.PHONY : src/gradient/ocv_prewitt.i
+
+# target to preprocess a source file
+src/gradient/ocv_prewitt.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/operators.dir/build.make CMakeFiles/operators.dir/src/gradient/ocv_prewitt.cpp.i
+.PHONY : src/gradient/ocv_prewitt.cpp.i
+
+src/gradient/ocv_prewitt.s: src/gradient/ocv_prewitt.cpp.s
+.PHONY : src/gradient/ocv_prewitt.s
+
+# target to generate assembly for a file
+src/gradient/ocv_prewitt.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/operators.dir/build.make CMakeFiles/operators.dir/src/gradient/ocv_prewitt.cpp.s
+.PHONY : src/gradient/ocv_prewitt.cpp.s
+
 src/gradient/ocv_sobel.o: src/gradient/ocv_sobel.cpp.o
 .PHONY : src/gradient/ocv_sobel.o
 
@@ -264,6 +288,9 @@ help:
 	@echo "... src/gradient/alt_sobel.o"
 	@echo "... src/gradient/alt_sobel.i"
 	@echo "... src/gradient/alt_sobel.s"
+	@echo "... src/gradient/ocv_prewitt.o"
+	@echo "... src/gradient/ocv_prewitt.i"
+	@echo "... src/gradient/ocv_prewitt.s"
 	@echo "... src/gradient/ocv_sobel.o"
 	@echo "... src/gradient/ocv_sobel.i"
 	@echo "... src/gradient/ocv_sobel.s"

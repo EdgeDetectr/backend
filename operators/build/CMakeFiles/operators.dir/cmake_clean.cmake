@@ -3,6 +3,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/operators.dir/main.cpp.o.d"
   "CMakeFiles/operators.dir/src/gradient/alt_sobel.cpp.o"
   "CMakeFiles/operators.dir/src/gradient/alt_sobel.cpp.o.d"
+  "CMakeFiles/operators.dir/src/gradient/ocv_prewitt.cpp.o"
+  "CMakeFiles/operators.dir/src/gradient/ocv_prewitt.cpp.o.d"
   "CMakeFiles/operators.dir/src/gradient/ocv_sobel.cpp.o"
   "CMakeFiles/operators.dir/src/gradient/ocv_sobel.cpp.o.d"
   "CMakeFiles/operators.dir/src/gradient/omp_sobel.cpp.o"

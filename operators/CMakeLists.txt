@@ -20,11 +20,13 @@ add_executable(operators
         include/gradient/alt_sobel.h
         src/utils/image_utils.cpp
         include/utils/image_utils.h
-        include/utils/sobel_util.h
+        include/utils/kernels_util.h
         src/gradient/omp_sobel.cpp
         include/gradient/omp_sobel.h
         src/gradient/ocv_prewitt.cpp
         include/gradient/ocv_prewitt.h
+        src/gradient/ocv_roberts_cross.cpp
+        include/gradient/ocv_roberts_cross.h
 )
 
 target_link_libraries(operators ${OpenCV_LIBS} OpenMP::OpenMP_CXX)

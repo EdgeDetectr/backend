@@ -11,19 +11,15 @@ using namespace cv;
  * @brief This file contains the declaration of the OpenCV Prewitt class that uses the OpenCV libary to detect edges.
  */
 class OcvPrewitt : public GradientOperator {
-private:
-    int ksize;
-    double scale, delta;
-
 public:
     /**
      * @brief Constructs a OCVPrewitt object.
      */
-    explicit OcvPrewitt(int kernelSize = 3);
+    explicit OcvPrewitt();
 
     Mat getEdges(const string &inputPath, const string &outputName) override;
 
-    [[nodiscard]] string getOperatorName() const override;
+    string getOperatorName() const override;
 
 private:
     /**

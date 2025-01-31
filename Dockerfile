@@ -1,106 +1,77 @@
-# FROM --platform=linux/amd64 node:18-slim
+# Build stage for C++ operators
+FROM --platform=$BUILDPLATFORM ubuntu:22.04 AS cpp-builder
 
-# WORKDIR /app
-
-# COPY package*.json ./
-# RUN npm install --production
-
-# RUN apt-get update && apt-get install -y \
-#     build-essential \
-#     libopencv-dev \
-#     libomp-dev \
-#     libssl-dev \
-#     pkg-config \
-#     && rm -rf /var/lib/apt/lists/* \
-#     cmake \
-#     && rm -rf /var/lib/apt/lists/*
-
-# RUN apt-get update && apt-get install -y \
-# wget \
-# && wget -q https://github.com/Kitware/CMake/releases/download/v3.30.0/cmake-3.30.0-linux-x86_64.sh \
-# && chmod +x cmake-3.30.0-linux-x86_64.sh \
-# && ./cmake-3.30.0-linux-x86_64.sh --skip-license --prefix=/usr/local \
-# && rm cmake-3.30.0-linux-x86_64.sh
-
-# ENV CC=/usr/bin/gcc
-# ENV CXX=/usr/bin/g++
-    
-# COPY ./operators/ ./operators/
-# WORKDIR /app/operators
-# RUN rm -rf build && \
-#     mkdir -p build && \
-#     cd build && \
-#     cmake .. -DCMAKE_SYSTEM_NAME=Linux && \
-#     make
-
-# WORKDIR /app
-# COPY . .
-
-# EXPOSE 3001
-
-# CMD ["node", "src/app.js"]
-
-# Use Ubuntu for full C++ and AWS support
-FROM --platform=$TARGETPLATFORM ubuntu:22.04 AS build
-
-# Set environment variables to prevent timezone prompt
+# Prevent interactive prompts during build
 ENV DEBIAN_FRONTEND=noninteractive \
     TZ=UTC
 
 WORKDIR /app
 
-# Install system dependencies for C++ compilation
+# Install build dependencies
 RUN apt-get update && apt-get install -y \
-    curl \
     build-essential \
     cmake \
     libopencv-dev \
     libomp-dev \
     libssl-dev \
     pkg-config \
-    tzdata \
     && rm -rf /var/lib/apt/lists/*
 
-# Install CMake 3.30 manually
-RUN curl -fsSL https://github.com/Kitware/CMake/releases/download/v3.30.0/cmake-3.30.0-linux-x86_64.sh -o cmake-install.sh && \
-    chmod +x cmake-install.sh && \
-    ./cmake-install.sh --skip-license --prefix=/usr/local && \
-    rm cmake-install.sh
-
-# Set compiler variables
-ENV CC=/usr/bin/gcc
-ENV CXX=/usr/bin/g++
-
-# Copy C++ operators
+# Copy and build C++ operators
 COPY ./operators/ ./operators/
 WORKDIR /app/operators
 
-# Ensure correct architecture compilation
-ARG TARGETPLATFORM
-RUN echo "Building for platform: $TARGETPLATFORM" && \
-    rm -rf build && \
+# Clean build directory and rebuild with static linking
+RUN rm -rf build && \
     mkdir -p build && \
     cd build && \
-    cmake .. -DCMAKE_SYSTEM_NAME=Linux && \
-    make
+    cmake -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_EXE_LINKER_FLAGS="-static-libgcc -static-libstdc++" \
+          .. && \
+    make -j$(nproc)
 
-# Use node image for final runtime
-FROM --platform=$TARGETPLATFORM node:18-slim AS runtime
+# Node.js runtime stage
+FROM --platform=$TARGETPLATFORM ubuntu:22.04 AS runtime
 
 WORKDIR /app
 
-# Copy compiled C++ binary from the build stage
-COPY --from=build /app/operators/build/operators /app/operators/build/operators
+# Set timezone and prevent interactive prompts
+ENV DEBIAN_FRONTEND=noninteractive \
+    TZ=UTC
 
-# Install dependencies
+# Install Node.js
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
+    apt-get update && \
+    apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install runtime dependencies
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
+    apt-get update && apt-get install -y \
+    libopencv-dev \
+    libomp5 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create necessary directories
+RUN mkdir -p /app/operators/build && \
+    mkdir -p /app/uploads && \
+    mkdir -p /app/results && \
+    chmod 777 /app/uploads && \
+    chmod 777 /app/results
+
+# Copy compiled C++ operators
+COPY --from=cpp-builder /app/operators/build/operators /app/operators/build/operators
+RUN chmod +x /app/operators/build/operators
+
+# Install Node.js dependencies
 COPY package*.json ./
 RUN npm install --production
 
-# Copy the entire project
+# Copy application code
 COPY . .
 
-# Expose backend port
 EXPOSE 3001
 
-# Start the Express.js server
 CMD ["node", "src/app.js"]

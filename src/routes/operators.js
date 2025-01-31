@@ -10,10 +10,35 @@ router.use(cors());
 
 // Upload folder
 const uploadFolder = path.join(__dirname, "../../uploads");
+const resultsFolder = path.join(__dirname, "../../results");
+
+// Function to clean folders
+const cleanFolders = () => {
+  try {
+    // Read and remove all files in uploads folder
+    const uploadFiles = fs.readdirSync(uploadFolder);
+    for (const file of uploadFiles) {
+      fs.unlinkSync(path.join(uploadFolder, file));
+    }
+    
+    // Read and remove all files in results folder
+    const resultFiles = fs.readdirSync(resultsFolder);
+    for (const file of resultFiles) {
+      fs.unlinkSync(path.join(resultsFolder, file));
+    }
+    
+    console.log('Cleaned uploads and results folders');
+  } catch (err) {
+    console.error('Error cleaning folders:', err);
+  }
+};
+
 // Upload multer with unique filename and folder creation if does not exist
 const upload = multer({
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
+      // Clean folders before new upload
+      cleanFolders();
       cb(null, uploadFolder);
     },
     filename: (req, file, cb) => {
@@ -32,7 +57,7 @@ router.post("/:operator", upload.single("file"), (req, res) => {
   const outputFilename = `output-${inputFilename}`;
 
   const inputPath = path.join(uploadFolder, inputFilename);
-  const outputPath = path.join(uploadFolder, outputFilename);
+  const outputPath = path.join(resultsFolder, outputFilename);
 
   if (!fs.existsSync(inputPath)) {
     return res.status(400).json({ error: "No file uploaded." });
@@ -99,15 +124,6 @@ router.post("/:operator", upload.single("file"), (req, res) => {
       inputImage: inputFilename,
       outputImage: outputFilename,
     });
-
-    setTimeout(() => {
-      try {
-        fs.unlinkSync(inputPath);
-        fs.unlinkSync(outputPath);
-      } catch (cleanupErr) {
-        console.error("Error cleaning up files:", cleanupErr);
-      }
-    }, 60000);
   });
 
   cppProcess.on("error", (err) => {

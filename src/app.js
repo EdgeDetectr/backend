@@ -22,6 +22,10 @@ app.use("/api/operators", operatorRoutes);
 const uploadFolder = path.join(__dirname, "../uploads");
 app.use("/uploads", express.static(uploadFolder));
 
+// Results folder and route
+const resultsFolder = path.join(__dirname, "../results");
+app.use("/results", express.static(resultsFolder));
+
 // API route to list all uploaded files
 app.get("/api/uploads", (req, res) => {
   fs.readdir(uploadFolder, (err, files) => {

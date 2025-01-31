@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/Users/kailinx/Desktop/EdgeUnity/operators/cmake-build-debug"
+			"value" : "/Users/kailinx/Desktop/EdgeUnity/backend/operators/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -479,7 +479,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/kailinx/Desktop/EdgeUnity/operators/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "/Users/kailinx/Desktop/EdgeUnity/backend/operators/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -539,7 +539,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/Users/kailinx/Desktop/EdgeUnity/operators"
+			"value" : "/Users/kailinx/Desktop/EdgeUnity/backend/operators"
 		},
 		{
 			"name" : "CMAKE_INSTALL_NAME_TOOL",
@@ -1127,7 +1127,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "[/opt/homebrew/Cellar/opencv/4.10.0_18][v4.10.0()]"
+			"value" : "[/opt/homebrew/Cellar/opencv/4.11.0][v4.11.0()]"
 		},
 		{
 			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_OpenMP",
@@ -1151,7 +1151,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "[-Xclang -fopenmp][/opt/homebrew/opt/llvm/lib/libomp.dylib][v5.1()]"
+			"value" : "[-Xclang -fopenmp][/opt/homebrew/lib/libomp.dylib][v5.1()]"
 		},
 		{
 			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_OpenMP_CXX",
@@ -1163,7 +1163,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "[-Xclang -fopenmp][/opt/homebrew/opt/llvm/lib/libomp.dylib][v5.1()]"
+			"value" : "[-Xclang -fopenmp][/opt/homebrew/lib/libomp.dylib][v5.1()]"
 		},
 		{
 			"name" : "OpenCV_DIR",
@@ -1359,7 +1359,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/opt/homebrew/opt/llvm/lib/libomp.dylib"
+			"value" : "/opt/homebrew/lib/libomp.dylib"
 		},
 		{
 			"name" : "operators_BINARY_DIR",
@@ -1371,7 +1371,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/kailinx/Desktop/EdgeUnity/operators/cmake-build-debug"
+			"value" : "/Users/kailinx/Desktop/EdgeUnity/backend/operators/cmake-build-debug"
 		},
 		{
 			"name" : "operators_IS_TOP_LEVEL",
@@ -1395,7 +1395,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/kailinx/Desktop/EdgeUnity/operators"
+			"value" : "/Users/kailinx/Desktop/EdgeUnity/backend/operators"
 		}
 	],
 	"kind" : "cache",

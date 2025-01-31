@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.30)
+cmake_minimum_required(VERSION 3.10)
 project(operators)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -21,10 +21,10 @@ add_executable(operators
         src/utils/image_utils.cpp
         include/utils/image_utils.h
         include/utils/sobel_util.h
-        src/utils/path_helper.cpp
-        include/utils/path_helper.h
         src/gradient/omp_sobel.cpp
         include/gradient/omp_sobel.h
+        src/gradient/ocv_prewitt.cpp
+        include/gradient/ocv_prewitt.h
 )
 
 target_link_libraries(operators ${OpenCV_LIBS} OpenMP::OpenMP_CXX)

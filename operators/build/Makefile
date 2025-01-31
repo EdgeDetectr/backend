@@ -249,30 +249,6 @@ src/utils/image_utils.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/operators.dir/build.make CMakeFiles/operators.dir/src/utils/image_utils.cpp.s
 .PHONY : src/utils/image_utils.cpp.s
 
-src/utils/path_helper.o: src/utils/path_helper.cpp.o
-.PHONY : src/utils/path_helper.o
-
-# target to build an object file
-src/utils/path_helper.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/operators.dir/build.make CMakeFiles/operators.dir/src/utils/path_helper.cpp.o
-.PHONY : src/utils/path_helper.cpp.o
-
-src/utils/path_helper.i: src/utils/path_helper.cpp.i
-.PHONY : src/utils/path_helper.i
-
-# target to preprocess a source file
-src/utils/path_helper.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/operators.dir/build.make CMakeFiles/operators.dir/src/utils/path_helper.cpp.i
-.PHONY : src/utils/path_helper.cpp.i
-
-src/utils/path_helper.s: src/utils/path_helper.cpp.s
-.PHONY : src/utils/path_helper.s
-
-# target to generate assembly for a file
-src/utils/path_helper.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/operators.dir/build.make CMakeFiles/operators.dir/src/utils/path_helper.cpp.s
-.PHONY : src/utils/path_helper.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -297,9 +273,6 @@ help:
 	@echo "... src/utils/image_utils.o"
 	@echo "... src/utils/image_utils.i"
 	@echo "... src/utils/image_utils.s"
-	@echo "... src/utils/path_helper.o"
-	@echo "... src/utils/path_helper.i"
-	@echo "... src/utils/path_helper.s"
 .PHONY : help
 
 

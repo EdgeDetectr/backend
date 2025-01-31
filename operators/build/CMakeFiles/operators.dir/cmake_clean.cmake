@@ -9,8 +9,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/operators.dir/src/gradient/omp_sobel.cpp.o.d"
   "CMakeFiles/operators.dir/src/utils/image_utils.cpp.o"
   "CMakeFiles/operators.dir/src/utils/image_utils.cpp.o.d"
-  "CMakeFiles/operators.dir/src/utils/path_helper.cpp.o"
-  "CMakeFiles/operators.dir/src/utils/path_helper.cpp.o.d"
   "operators"
   "operators.pdb"
 )

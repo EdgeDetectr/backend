@@ -42,7 +42,7 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /Users/kailinx/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake --regenerate-during-build -S/Users/kailinx/Desktop/EdgeUnity/operators -B/Users/kailinx/Desktop/EdgeUnity/operators/cmake-build-debug
+  command = /Users/kailinx/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake --regenerate-during-build -S/Users/kailinx/Desktop/EdgeUnity/backend/operators -B/Users/kailinx/Desktop/EdgeUnity/backend/operators/cmake-build-debug
   description = Re-running CMake...
   generator = 1
 

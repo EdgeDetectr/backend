@@ -1,9 +1,9 @@
 # ninja log v6
-19	981	1735527536666200794	CMakeFiles/operators.dir/src/utils/image_utils.cpp.o	9b1de7f214910d4e
-8	1169	1735528578970673145	CMakeFiles/operators.dir/src/gradient/alt_sobel.cpp.o	afad940c4d61575d
-24	1329	1735886806891672762	CMakeFiles/operators.dir/main.cpp.o	36e624ec94cf4e88
-8	1128	1735533946784797688	CMakeFiles/operators.dir/src/gradient/omp_sobel.cpp.o	5b0013a342e08841
-17	982	1735527536664476846	CMakeFiles/operators.dir/src/gradient/sobel.cpp.o	db15aff1a9e8b991
-7	1120	1735528578969837235	CMakeFiles/operators.dir/src/gradient/ocv_sobel.cpp.o	aa420272c10e5e42
-19	548	1735527536666513668	CMakeFiles/operators.dir/src/utils/path_helper.cpp.o	36b2a0e44a475ba2
-1330	1521	1735886808197613531	operators	adc8db59e802f0c3
+7	1447	1738298272447091311	CMakeFiles/operators.dir/src/gradient/ocv_sobel.cpp.o	4eae114efa41005f
+9	1427	1738298272448481157	CMakeFiles/operators.dir/src/utils/image_utils.cpp.o	989c291bcac8f569
+8	1489	1738298272448179987	CMakeFiles/operators.dir/src/gradient/alt_sobel.cpp.o	4a043fa9fde8a0b1
+9	1474	1738298272448679284	CMakeFiles/operators.dir/src/gradient/omp_sobel.cpp.o	4eb4370cc0314c42
+6	1098	1738298286035233399	CMakeFiles/operators.dir/main.cpp.o	b6dbe55180b607cf
+1519	1658	1738298273958774231	operators	8edef3580a21c8c7
+6	1073	1738299410052297552	CMakeFiles/operators.dir/src/gradient/ocv_prewitt.cpp.o	569fdb530981622d
+1073	1215	1738299411119689947	operators	f4fe5be733ab3600

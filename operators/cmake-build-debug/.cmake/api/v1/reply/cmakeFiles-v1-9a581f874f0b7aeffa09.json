@@ -196,8 +196,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "/Users/kailinx/Desktop/EdgeUnity/operators/cmake-build-debug",
-		"source" : "/Users/kailinx/Desktop/EdgeUnity/operators"
+		"build" : "/Users/kailinx/Desktop/EdgeUnity/backend/operators/cmake-build-debug",
+		"source" : "/Users/kailinx/Desktop/EdgeUnity/backend/operators"
 	},
 	"version" : 
 	{

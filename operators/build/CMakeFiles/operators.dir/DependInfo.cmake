@@ -11,6 +11,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/kailinx/Desktop/EdgeUnity/backend/operators/main.cpp" "CMakeFiles/operators.dir/main.cpp.o" "gcc" "CMakeFiles/operators.dir/main.cpp.o.d"
   "/Users/kailinx/Desktop/EdgeUnity/backend/operators/src/gradient/alt_sobel.cpp" "CMakeFiles/operators.dir/src/gradient/alt_sobel.cpp.o" "gcc" "CMakeFiles/operators.dir/src/gradient/alt_sobel.cpp.o.d"
   "/Users/kailinx/Desktop/EdgeUnity/backend/operators/src/gradient/ocv_prewitt.cpp" "CMakeFiles/operators.dir/src/gradient/ocv_prewitt.cpp.o" "gcc" "CMakeFiles/operators.dir/src/gradient/ocv_prewitt.cpp.o.d"
+  "/Users/kailinx/Desktop/EdgeUnity/backend/operators/src/gradient/ocv_roberts_cross.cpp" "CMakeFiles/operators.dir/src/gradient/ocv_roberts_cross.cpp.o" "gcc" "CMakeFiles/operators.dir/src/gradient/ocv_roberts_cross.cpp.o.d"
   "/Users/kailinx/Desktop/EdgeUnity/backend/operators/src/gradient/ocv_sobel.cpp" "CMakeFiles/operators.dir/src/gradient/ocv_sobel.cpp.o" "gcc" "CMakeFiles/operators.dir/src/gradient/ocv_sobel.cpp.o.d"
   "/Users/kailinx/Desktop/EdgeUnity/backend/operators/src/gradient/omp_sobel.cpp" "CMakeFiles/operators.dir/src/gradient/omp_sobel.cpp.o" "gcc" "CMakeFiles/operators.dir/src/gradient/omp_sobel.cpp.o.d"
   "/Users/kailinx/Desktop/EdgeUnity/backend/operators/src/utils/image_utils.cpp" "CMakeFiles/operators.dir/src/utils/image_utils.cpp.o" "gcc" "CMakeFiles/operators.dir/src/utils/image_utils.cpp.o.d"

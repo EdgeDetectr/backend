@@ -1,11 +1,10 @@
 # ninja log v6
-964	1085	1738300340199534370	operators	f4fe5be733ab3600
+1109	1234	1738301172685917168	operators	8e441d1ce5af5549
 9	1322	1738301065628317845	CMakeFiles/operators.dir/src/gradient/alt_sobel.cpp.o	4a043fa9fde8a0b1
 8	1273	1738301065627301920	CMakeFiles/operators.dir/main.cpp.o	b6dbe55180b607cf
 9	1302	1738301065628513013	CMakeFiles/operators.dir/src/gradient/omp_sobel.cpp.o	4eb4370cc0314c42
+8	1109	1738301171585627003	CMakeFiles/operators.dir/src/gradient/ocv_roberts_cross.cpp.o	2aa4dc8b888dd2b1
 9	1294	1738301065628673390	CMakeFiles/operators.dir/src/gradient/ocv_prewitt.cpp.o	569fdb530981622d
+2	99	1738301581711631448	build.ninja	516b14b1cc7a54b8
 2	1415	1738300289948624623	CMakeFiles/operators.dir/src/gradient/ocv_sobel.cpp.o	4eae114efa41005f
 3	1336	1738300289949610549	CMakeFiles/operators.dir/src/utils/image_utils.cpp.o	989c291bcac8f569
-2	99	1738301151465659141	build.ninja	516b14b1cc7a54b8
-8	1109	1738301171585627003	CMakeFiles/operators.dir/src/gradient/ocv_roberts_cross.cpp.o	2aa4dc8b888dd2b1
-1109	1234	1738301172685917168	operators	8e441d1ce5af5549

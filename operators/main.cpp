@@ -16,45 +16,47 @@ void applyOperator(GradientOperator* operatorPtr, const string& inputPath, const
 
 // main method that processes the input arguments from the backend and applies the operator.
 int main(int argc, char* argv[]) {
-//    if (argc < 4) {
-//        cerr << "Usage: operators <operator> <input_path> <output_path>" << endl;
-//        return 1;
-//    }
-//
-//    string operatorType = argv[1];
-//    string inputPath = argv[2];
-//    string outputPath = argv[3];
-//
-//    try {
-//        if (operatorType == "opencv%20sobel") {
-//            OcvSobel sobelOperator;
-//            sobelOperator.getEdges(inputPath, outputPath);
-//        } else if (operatorType == "alternative%20sobel") {
-//            AltSobel altSobelOperator;
-//            altSobelOperator.getEdges(inputPath, outputPath);
-//        } else if (operatorType == "openmp%20sobel") {
-//            OmpSobel ompSobelOperator;
-//            ompSobelOperator.getEdges(inputPath, outputPath);
-//        } else if (operatorType == "opencv%20prewitt") {
-//            OcvPrewitt prewittOperator;
-//            prewittOperator.getEdges(inputPath, outputPath);
-//        }
-//        else {
-//            std::cerr << "Unknown operator: " << operatorType << std::endl;
-//            return 1;
-//        }
-//        std::cout << "Processing completed successfully!" << std::endl;
-//    } catch (const std::exception& e) {
-//        std::cerr << "Error: " << e.what() << std::endl;
-//        return 1;
-//    }
-
-    string inputPath = "/Users/kailinx/Desktop/EdgeUnity/backend/operators/test/gradient/datasets/image.jpg";
-    list<GradientOperator*> operators = {new OcvSobel(), new AltSobel(), new OmpSobel(), new OcvPrewitt(), new OcvRobertsCross()};
-    for (auto& operatorPtr : operators) {
-        string outputPath = "/Users/kailinx/Desktop/EdgeUnity/backend/operators/test/gradient/datasets/"+operatorPtr->getOperatorName()+".jpg";
-        applyOperator(operatorPtr, inputPath, outputPath);
+    if (argc < 4) {
+        cerr << "Usage: operators <operator> <input_path> <output_path>" << endl;
+        return 1;
     }
+
+    string operatorType = argv[1];
+    string inputPath = argv[2];
+    string outputPath = argv[3];
+
+    try {
+        if (operatorType == "opencv%20sobel") {
+            OcvSobel sobelOperator;
+            sobelOperator.getEdges(inputPath, outputPath);
+        } else if (operatorType == "alternative%20sobel") {
+            AltSobel altSobelOperator;
+            altSobelOperator.getEdges(inputPath, outputPath);
+        } else if (operatorType == "openmp%20sobel") {
+            OmpSobel ompSobelOperator;
+            ompSobelOperator.getEdges(inputPath, outputPath);
+        } else if (operatorType == "prewitt") {
+            OcvPrewitt prewittOperator;
+            prewittOperator.getEdges(inputPath, outputPath);
+        } else if (operatorType == "roberts%20cross") {
+            OcvRobertsCross robertsCross;
+            robertsCross.getEdges(inputPath, outputPath);
+        } else {
+            cerr << "Unknown operator: " << operatorType << endl;
+            return 1;
+        }
+        cout << "Processing completed successfully!" << endl;
+    } catch (const exception& e) {
+        cerr << "Error: " << e.what() << endl;
+        return 1;
+    }
+
+//    string inputPath = "/Users/kailinx/Desktop/EdgeUnity/backend/operators/test/gradient/datasets/image.jpg";
+//    list<GradientOperator*> operators = {new OcvSobel(), new AltSobel(), new OmpSobel(), new OcvPrewitt(), new OcvRobertsCross()};
+//    for (auto& operatorPtr : operators) {
+//        string outputPath = "/Users/kailinx/Desktop/EdgeUnity/backend/operators/test/gradient/datasets/"+operatorPtr->getOperatorName()+".jpg";
+//        applyOperator(operatorPtr, inputPath, outputPath);
+//    }
 
     return 0;
 }

@@ -1,5 +1,5 @@
 # Build stage for C++ operators
-FROM --platform=$BUILDPLATFORM ubuntu:22.04 AS cpp-builder
+FROM ubuntu:22.04 AS cpp-builder
 
 # Prevent interactive prompts during build
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -31,7 +31,7 @@ RUN rm -rf build && \
     make -j$(nproc)
 
 # Node.js runtime stage
-FROM --platform=$TARGETPLATFORM ubuntu:22.04 AS runtime
+FROM ubuntu:22.04 AS runtime
 
 WORKDIR /app
 

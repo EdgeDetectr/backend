@@ -2,6 +2,7 @@ const express = require("express");
 const PORT = 3001;
 const cors = require("cors");
 const path = require("path");
+const fs = require("fs");
 
 const operatorRoutes = require("./routes/operators");
 
@@ -13,6 +14,11 @@ app.use(cors());
 app.get("/", (req, res) => {
   res.status(200);
   res.send("Welcome to root URL of Server");
+});
+
+// Health check endpoint for load balancer
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "healthy" });
 });
 
 // API routes for operators

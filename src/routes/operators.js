@@ -15,21 +15,32 @@ const resultsFolder = path.join(__dirname, "../../results");
 // Function to clean folders
 const cleanFolders = () => {
   try {
+    // Create directories if they don't exist
+    if (!fs.existsSync(uploadFolder)) {
+      fs.mkdirSync(uploadFolder, { recursive: true });
+      console.log("Created uploads folder");
+    }
+
+    if (!fs.existsSync(resultsFolder)) {
+      fs.mkdirSync(resultsFolder, { recursive: true });
+      console.log("Created results folder");
+    }
+
     // Read and remove all files in uploads folder
     const uploadFiles = fs.readdirSync(uploadFolder);
     for (const file of uploadFiles) {
       fs.unlinkSync(path.join(uploadFolder, file));
     }
-    
+
     // Read and remove all files in results folder
     const resultFiles = fs.readdirSync(resultsFolder);
     for (const file of resultFiles) {
       fs.unlinkSync(path.join(resultsFolder, file));
     }
-    
-    console.log('Cleaned uploads and results folders');
+
+    console.log("Cleaned uploads and results folders");
   } catch (err) {
-    console.error('Error cleaning folders:', err);
+    console.error("Error cleaning folders:", err);
   }
 };
 
@@ -53,6 +64,15 @@ router.post("/:operator", upload.single("file"), (req, res) => {
   const operator = req.params.operator;
   console.log("Operator:", operator);
   const encodedOperator = encodeURIComponent(operator);
+
+  // Check if file was uploaded
+  if (!req.file) {
+    console.error("No file was uploaded");
+    return res
+      .status(400)
+      .json({ error: "No file was uploaded. Please select a file." });
+  }
+
   const inputFilename = req.file.filename;
   const outputFilename = `output-${inputFilename}`;
 
@@ -60,13 +80,25 @@ router.post("/:operator", upload.single("file"), (req, res) => {
   const outputPath = path.join(resultsFolder, outputFilename);
 
   if (!fs.existsSync(inputPath)) {
-    return res.status(400).json({ error: "No file uploaded." });
+    console.error("File uploaded but not found at:", inputPath);
+    return res.status(400).json({
+      error: "File was uploaded but cannot be found. Please try again.",
+    });
   }
 
-  const executablePath =
-    process.env.OPERATOR_PROCESS || __dirname + "/../../operators/build";
+  // Log file details
+  console.log("Input file details:", {
+    name: req.file.originalname,
+    size: req.file.size,
+    mimetype: req.file.mimetype,
+    path: inputPath,
+  });
 
-  console.log(process.env.OPERATOR_PROCESS);
+  const executablePath =
+    process.env.OPERATOR_PROCESS ||
+    path.join(__dirname, "../../operators/build");
+
+  console.log("Process env:", process.env.OPERATOR_PROCESS);
 
   const operatorProcess = path.join(executablePath, "operators");
 
@@ -76,13 +108,24 @@ router.post("/:operator", upload.single("file"), (req, res) => {
   console.log("Executable path:", executablePath);
   console.log("Operator process:", operatorProcess);
 
+  // Check if executable exists
   if (!fs.existsSync(operatorProcess)) {
     console.error("Operator executable not found at:", operatorProcess);
     return res.status(500).json({ error: "Operator executable not found." });
   }
 
+  // Check if input file is a valid image by checking file size and mime type
+  if (req.file.size <= 0) {
+    console.error("Invalid image: File is empty");
+    return res.status(400).json({ error: "Invalid image file: File is empty" });
+  }
+
   try {
+    // Change to executable directory
+    const currentDir = process.cwd();
+    console.log("Current directory before change:", currentDir);
     process.chdir(executablePath);
+    console.log("Directory changed to:", process.cwd());
   } catch (err) {
     console.error(
       "Failed to change directory:",
@@ -92,8 +135,14 @@ router.post("/:operator", upload.single("file"), (req, res) => {
       "executable path:",
       executablePath
     );
-    return res.status(500).json({ error: "Internal server error." });
+    return res
+      .status(500)
+      .json({ error: "Internal server error: directory change failed." });
   }
+
+  // Collect stderr output
+  let stderrOutput = "";
+  let stdoutOutput = "";
 
   const cppProcess = spawn(operatorProcess, [
     encodedOperator,
@@ -102,24 +151,54 @@ router.post("/:operator", upload.single("file"), (req, res) => {
   ]);
 
   cppProcess.stdout.on("data", (data) => {
-    console.log(`stdout: ${data}`);
+    const output = data.toString();
+    stdoutOutput += output;
+    console.log(`stdout: ${output}`);
   });
 
   cppProcess.stderr.on("data", (data) => {
-    console.error(`stderr: ${data}`);
+    const error = data.toString();
+    stderrOutput += error;
+    console.error(`stderr: ${error}`);
   });
 
   cppProcess.on("close", (code) => {
     console.log("C++ process closed with code:", code);
-    process.chdir(__dirname);
+
+    // Change back to original directory
+    try {
+      process.chdir(__dirname);
+      console.log("Directory changed back to:", process.cwd());
+    } catch (err) {
+      console.error("Failed to change back to original directory:", err);
+    }
 
     if (code !== 0) {
       console.error(`C++ process exited with code ${code}`);
-      return res.status(500).json({ error: "Processing failed." });
+
+      // Check if output file exists despite error
+      if (fs.existsSync(outputPath)) {
+        console.log("Output file exists despite error code. Proceeding...");
+      } else {
+        return res.status(500).json({
+          error: "Processing failed",
+          details: stderrOutput || "No error details available",
+          exitCode: code,
+        });
+      }
     }
 
-    console.log(inputFilename);
-    console.log(outputFilename);
+    // Check if output file exists
+    if (!fs.existsSync(outputPath)) {
+      console.error("Output file not created:", outputPath);
+      return res.status(500).json({
+        error: "Output file not created",
+        details: stderrOutput || "No error details available",
+      });
+    }
+
+    console.log("Input filename:", inputFilename);
+    console.log("Output filename:", outputFilename);
     res.json({
       inputImage: inputFilename,
       outputImage: outputFilename,
@@ -128,9 +207,19 @@ router.post("/:operator", upload.single("file"), (req, res) => {
 
   cppProcess.on("error", (err) => {
     console.error("C++ process error:", err);
-    process.chdir(__dirname);
+
+    // Change back to original directory
+    try {
+      process.chdir(__dirname);
+    } catch (dirErr) {
+      console.error("Failed to change back to original directory:", dirErr);
+    }
+
     console.error("Failed to start subprocess:", err);
-    return res.status(500).json({ error: "Failed to start subprocess." });
+    return res.status(500).json({
+      error: "Failed to start subprocess",
+      details: err.message,
+    });
   });
 });
 

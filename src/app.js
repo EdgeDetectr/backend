@@ -8,7 +8,18 @@ const operatorRoutes = require("./routes/operators");
 
 const app = express();
 
-app.use(cors());
+// Configure CORS with environment variables or defaults for local development
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(",")
+  : ["http://localhost:3000"];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 // dummy entry route
 app.get("/", (req, res) => {

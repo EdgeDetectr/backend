@@ -30,6 +30,15 @@ RUN rm -rf build && \
           .. && \
     make -j$(nproc)
 
+# Check if build was successful and binary exists
+RUN if [ ! -f ./build/operators ]; then \
+      echo "Error: operators executable not built successfully" && exit 1; \
+    else \
+      echo "Operators built successfully" && \
+      chmod +x ./build/operators && \
+      ls -la ./build/; \
+    fi
+
 # Node.js runtime stage
 FROM --platform=linux/amd64 ubuntu:22.04 AS runtime
 
@@ -54,16 +63,20 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone &
     libomp5 \
     && rm -rf /var/lib/apt/lists/*
 
-# Create necessary directories
+# Create necessary directories with correct permissions
 RUN mkdir -p /app/operators/build && \
     mkdir -p /app/uploads && \
     mkdir -p /app/results && \
     chmod 777 /app/uploads && \
-    chmod 777 /app/results
+    chmod 777 /app/results && \
+    chmod 777 /app/operators/build
 
 # Copy compiled C++ operators
 COPY --from=cpp-builder /app/operators/build/operators /app/operators/build/operators
-RUN chmod +x /app/operators/build/operators
+RUN chmod +x /app/operators/build/operators && \
+    ls -la /app/operators/build/ && \
+    echo "Testing operator binary:" && \
+    /app/operators/build/operators || echo "operator returns non-zero exit code (this is expected without proper args)"
 
 # Install Node.js dependencies
 COPY package*.json ./
@@ -72,6 +85,13 @@ RUN npm install --production
 # Copy application code
 COPY . .
 
+# Set environment variable for operator executable path
+ENV OPERATOR_PROCESS="/app/operators/build"
+
+# Make sure the server.js and other scripts are executable
+RUN chmod +x /app/src/*.js
+
 EXPOSE 3001
 
+# Use CMD array format for better signal handling
 CMD ["node", "src/app.js"]

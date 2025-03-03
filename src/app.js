@@ -15,11 +15,35 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps, curl, etc.)
+      if (!origin) return callback(null, true);
+
+      // For preflight requests, always allow during development and testing
+      // Production should rely on environment variables
+      if (
+        process.env.NODE_ENV !== "production" ||
+        allowedOrigins.includes(origin)
+      ) {
+        return callback(null, true);
+      }
+
+      console.log(
+        "Origin rejected:",
+        origin,
+        "Allowed origins:",
+        allowedOrigins
+      );
+      return callback(new Error(`Origin ${origin} not allowed by CORS`), false);
+    },
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+// Add preflight handling for all routes
+app.options("*", cors());
 
 // dummy entry route
 app.get("/", (req, res) => {

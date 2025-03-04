@@ -11,39 +11,79 @@ const app = express();
 // Configure CORS with environment variables or defaults for local development
 const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(",")
-  : ["http://localhost:3000"];
+  : [
+      "http://localhost:3000",
+      "https://www.edgedetectr.com",
+      "https://edgedetectr.com",
+    ];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps, curl, etc.)
-      if (!origin) return callback(null, true);
+// CORS configuration
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Log all incoming requests for debugging
+    console.log("Incoming request origin:", origin);
+    console.log("Current environment:", process.env.NODE_ENV);
+    console.log("Allowed origins:", allowedOrigins);
 
-      // For preflight requests, always allow during development and testing
-      // Production should rely on environment variables
-      if (
-        process.env.NODE_ENV !== "production" ||
-        allowedOrigins.includes(origin)
-      ) {
-        return callback(null, true);
-      }
+    // Allow requests with no origin (like mobile apps, curl, etc.)
+    if (!origin) {
+      console.log("No origin provided, allowing request");
+      return callback(null, true);
+    }
 
-      console.log(
-        "Origin rejected:",
-        origin,
-        "Allowed origins:",
-        allowedOrigins
-      );
-      return callback(new Error(`Origin ${origin} not allowed by CORS`), false);
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+    // For development, allow all origins
+    if (process.env.NODE_ENV !== "production") {
+      console.log("Development environment, allowing all origins");
+      return callback(null, true);
+    }
+
+    // Check if origin is allowed
+    if (allowedOrigins.includes(origin)) {
+      console.log("Origin allowed:", origin);
+      return callback(null, true);
+    }
+
+    console.log("Origin rejected:", origin);
+    return callback(new Error(`Origin ${origin} not allowed by CORS`), false);
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "Accept",
+    "Origin",
+    "X-Requested-With",
+  ],
+  exposedHeaders: ["Content-Range", "X-Content-Range"],
+  maxAge: 86400, // 24 hours
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+};
+
+// Enable CORS for all routes
+app.use(cors(corsOptions));
 
 // Add preflight handling for all routes
-app.options("*", cors());
+app.options("*", cors(corsOptions));
+
+// Add error handling for CORS errors
+app.use((err, req, res, next) => {
+  if (err.message.includes("CORS")) {
+    console.error("CORS Error:", err);
+    console.error("Request headers:", req.headers);
+    console.error("Request origin:", req.headers.origin);
+
+    return res.status(403).json({
+      error: "CORS Error",
+      message: err.message,
+      allowedOrigins:
+        process.env.NODE_ENV === "production" ? "hidden" : allowedOrigins,
+      requestOrigin: req.headers.origin,
+    });
+  }
+  next(err);
+});
 
 // dummy entry route
 app.get("/", (req, res) => {

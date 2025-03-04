@@ -9,34 +9,53 @@ const router = express.Router();
 // Configure CORS with environment variables or defaults for local development
 const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(",")
-  : ["http://localhost:3000"];
+  : [
+      "http://localhost:3000",
+      "https://www.edgedetectr.com",
+      "https://edgedetectr.com",
+      "https://edgedetectr-lb-2106112805.us-east-1.elb.amazonaws.com",
+    ];
 
 router.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps, curl, etc.)
-      if (!origin) return callback(null, true);
+      console.log("Operator route - Incoming request origin:", origin);
 
-      // For preflight requests, always allow during development and testing
-      // Production should rely on environment variables
-      if (
-        process.env.NODE_ENV !== "production" ||
-        allowedOrigins.includes(origin)
-      ) {
+      // Allow requests with no origin (like mobile apps, curl, etc.)
+      if (!origin) {
+        console.log("No origin provided, allowing request");
         return callback(null, true);
       }
 
-      console.log(
-        "Origin rejected:",
-        origin,
-        "Allowed origins:",
-        allowedOrigins
-      );
+      // For development, allow all origins
+      if (process.env.NODE_ENV !== "production") {
+        console.log("Development environment, allowing all origins");
+        return callback(null, true);
+      }
+
+      // Check if origin is allowed
+      if (
+        allowedOrigins.includes(origin) ||
+        origin.endsWith("edgedetectr.com")
+      ) {
+        console.log("Origin allowed:", origin);
+        return callback(null, true);
+      }
+
+      console.log("Origin rejected:", origin);
       return callback(new Error(`Origin ${origin} not allowed by CORS`), false);
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "Accept",
+      "Origin",
+      "X-Requested-With",
+    ],
+    exposedHeaders: ["Content-Range", "X-Content-Range"],
+    maxAge: 86400,
   })
 );
 

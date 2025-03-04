@@ -15,6 +15,7 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
       "http://localhost:3000",
       "https://www.edgedetectr.com",
       "https://edgedetectr.com",
+      "https://edgedetectr-lb-2106112805.us-east-1.elb.amazonaws.com",
     ];
 
 // CORS configuration
@@ -38,7 +39,7 @@ const corsOptions = {
     }
 
     // Check if origin is allowed
-    if (allowedOrigins.includes(origin)) {
+    if (allowedOrigins.includes(origin) || origin.endsWith("edgedetectr.com")) {
       console.log("Origin allowed:", origin);
       return callback(null, true);
     }

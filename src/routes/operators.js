@@ -13,6 +13,7 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
       "http://localhost:3000",
       "https://www.edgedetectr.com",
       "https://edgedetectr.com",
+      "https://api.edgedetectr.com",
       "https://edgedetectr-lb-2106112805.us-east-1.elb.amazonaws.com",
     ];
 

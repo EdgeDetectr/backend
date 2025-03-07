@@ -20,17 +20,17 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
 router.use(
   cors({
     origin: function (origin, callback) {
-      console.log("Operator route - Incoming request origin:", origin);
+      // console.log("Operator route - Incoming request origin:", origin);
 
       // Allow requests with no origin (like mobile apps, curl, etc.)
       if (!origin) {
-        console.log("No origin provided, allowing request");
+        // console.log("No origin provided, allowing request");
         return callback(null, true);
       }
 
       // For development, allow all origins
       if (process.env.NODE_ENV !== "production") {
-        console.log("Development environment, allowing all origins");
+        // console.log("Development environment, allowing all origins");
         return callback(null, true);
       }
 
@@ -39,11 +39,11 @@ router.use(
         allowedOrigins.includes(origin) ||
         origin.endsWith("edgedetectr.com")
       ) {
-        console.log("Origin allowed:", origin);
+        // console.log("Origin allowed:", origin);
         return callback(null, true);
       }
 
-      console.log("Origin rejected:", origin);
+      // console.log("Origin rejected:", origin);
       return callback(new Error(`Origin ${origin} not allowed by CORS`), false);
     },
     credentials: true,
@@ -73,12 +73,12 @@ const cleanFolders = () => {
     // Create directories if they don't exist
     if (!fs.existsSync(uploadFolder)) {
       fs.mkdirSync(uploadFolder, { recursive: true });
-      console.log("Created uploads folder");
+      // console.log("Created uploads folder");
     }
 
     if (!fs.existsSync(resultsFolder)) {
       fs.mkdirSync(resultsFolder, { recursive: true });
-      console.log("Created results folder");
+      // console.log("Created results folder");
     }
 
     // Read and remove all files in uploads folder
@@ -93,7 +93,7 @@ const cleanFolders = () => {
       fs.unlinkSync(path.join(resultsFolder, file));
     }
 
-    console.log("Cleaned uploads and results folders");
+    // console.log("Cleaned uploads and results folders");
   } catch (err) {
     console.error("Error cleaning folders:", err);
   }
@@ -117,7 +117,7 @@ const upload = multer({
 // POST /operators/:operator route to process the uploaded image with the operator and saving the output image
 router.post("/:operator", upload.single("file"), (req, res) => {
   const operator = req.params.operator;
-  console.log("Operator:", operator);
+  // console.log("Operator:", operator);
   const encodedOperator = encodeURIComponent(operator);
 
   // Check if file was uploaded
@@ -142,26 +142,26 @@ router.post("/:operator", upload.single("file"), (req, res) => {
   }
 
   // Log file details
-  console.log("Input file details:", {
-    name: req.file.originalname,
-    size: req.file.size,
-    mimetype: req.file.mimetype,
-    path: inputPath,
-  });
+  // console.log("Input file details:", {
+  //   name: req.file.originalname,
+  //   size: req.file.size,
+  //   mimetype: req.file.mimetype,
+  //   path: inputPath,
+  // });
 
   const executablePath =
     process.env.OPERATOR_PROCESS ||
     path.join(__dirname, "../../operators/build");
 
-  console.log("Process env:", process.env.OPERATOR_PROCESS);
+  // console.log("Process env:", process.env.OPERATOR_PROCESS);
 
   const operatorProcess = path.join(executablePath, "operators");
 
-  console.log("Processing image with operator:", operator);
-  console.log("Input file:", inputPath);
-  console.log("Output file:", outputPath);
-  console.log("Executable path:", executablePath);
-  console.log("Operator process:", operatorProcess);
+  // console.log("Processing image with operator:", operator);
+  // console.log("Input file:", inputPath);
+  // console.log("Output file:", outputPath);
+  // console.log("Executable path:", executablePath);
+  // console.log("Operator process:", operatorProcess);
 
   // Check if executable exists
   if (!fs.existsSync(operatorProcess)) {
@@ -178,9 +178,9 @@ router.post("/:operator", upload.single("file"), (req, res) => {
   try {
     // Change to executable directory
     const currentDir = process.cwd();
-    console.log("Current directory before change:", currentDir);
+    // console.log("Current directory before change:", currentDir);
     process.chdir(executablePath);
-    console.log("Directory changed to:", process.cwd());
+    // console.log("Directory changed to:", process.cwd());
   } catch (err) {
     console.error(
       "Failed to change directory:",
@@ -208,7 +208,7 @@ router.post("/:operator", upload.single("file"), (req, res) => {
   cppProcess.stdout.on("data", (data) => {
     const output = data.toString();
     stdoutOutput += output;
-    console.log(`stdout: ${output}`);
+    // console.log(`stdout: ${output}`);
   });
 
   cppProcess.stderr.on("data", (data) => {
@@ -218,12 +218,12 @@ router.post("/:operator", upload.single("file"), (req, res) => {
   });
 
   cppProcess.on("close", (code) => {
-    console.log("C++ process closed with code:", code);
+    // console.log("C++ process closed with code:", code);
 
     // Change back to original directory
     try {
       process.chdir(__dirname);
-      console.log("Directory changed back to:", process.cwd());
+      // console.log("Directory changed back to:", process.cwd());
     } catch (err) {
       console.error("Failed to change back to original directory:", err);
     }
@@ -233,7 +233,7 @@ router.post("/:operator", upload.single("file"), (req, res) => {
 
       // Check if output file exists despite error
       if (fs.existsSync(outputPath)) {
-        console.log("Output file exists despite error code. Proceeding...");
+        // console.log("Output file exists despite error code. Proceeding...");
       } else {
         return res.status(500).json({
           error: "Processing failed",
@@ -252,8 +252,8 @@ router.post("/:operator", upload.single("file"), (req, res) => {
       });
     }
 
-    console.log("Input filename:", inputFilename);
-    console.log("Output filename:", outputFilename);
+    // console.log("Input filename:", inputFilename);
+    // console.log("Output filename:", outputFilename);
     res.json({
       inputImage: inputFilename,
       outputImage: outputFilename,

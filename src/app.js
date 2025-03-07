@@ -23,29 +23,29 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
 const corsOptions = {
   origin: function (origin, callback) {
     // Log all incoming requests for debugging
-    console.log("Incoming request origin:", origin);
-    console.log("Current environment:", process.env.NODE_ENV);
-    console.log("Allowed origins:", allowedOrigins);
+    // console.log("Incoming request origin:", origin);
+    // console.log("Current environment:", process.env.NODE_ENV);
+    // console.log("Allowed origins:", allowedOrigins);
 
     // Allow requests with no origin (like mobile apps, curl, etc.)
     if (!origin) {
-      console.log("No origin provided, allowing request");
+      // console.log("No origin provided, allowing request");
       return callback(null, true);
     }
 
     // For development, allow all origins
     if (process.env.NODE_ENV !== "production") {
-      console.log("Development environment, allowing all origins");
+      // console.log("Development environment, allowing all origins");
       return callback(null, true);
     }
 
     // Check if origin is allowed
     if (allowedOrigins.includes(origin) || origin.endsWith("edgedetectr.com")) {
-      console.log("Origin allowed:", origin);
+      // console.log("Origin allowed:", origin);
       return callback(null, true);
     }
 
-    console.log("Origin rejected:", origin);
+    // console.log("Origin rejected:", origin);
     return callback(new Error(`Origin ${origin} not allowed by CORS`), false);
   },
   credentials: true,

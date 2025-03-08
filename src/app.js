@@ -67,6 +67,23 @@ app.use(cors(corsOptions));
 // Add preflight handling for all routes
 app.options("*", cors(corsOptions));
 
+// Add SEO-friendly headers to all responses
+app.use((req, res, next) => {
+  // Add descriptive headers to help with API discovery
+  res.setHeader("X-Robots-Tag", "index, follow");
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader(
+    "X-API-Description",
+    "Edge Detectr API - Image edge detection service"
+  );
+
+  // Set cache control headers for better performance
+  res.setHeader("Cache-Control", "public, max-age=600"); // 10 minutes for most resources
+
+  // Continue to the next middleware
+  next();
+});
+
 // Add error handling for CORS errors
 app.use((err, req, res, next) => {
   if (err.message.includes("CORS")) {
@@ -88,7 +105,39 @@ app.use((err, req, res, next) => {
 // dummy entry route
 app.get("/", (req, res) => {
   res.status(200);
-  res.send("Welcome to root URL of Server");
+  res.setHeader("Content-Type", "text/html");
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="Edge Detectr API - A backend service for image edge detection">
+      <meta name="robots" content="index, follow">
+      <title>Edge Detectr API</title>
+      <style>
+        body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; color: #333; }
+        h1 { color: #2563eb; }
+        pre { background: #f5f5f5; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        a { color: #2563eb; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+      </style>
+    </head>
+    <body>
+      <h1>Edge Detectr API</h1>
+      <p>Welcome to the Edge Detectr API. This is the backend service for the <a href="https://edgedetectr.com">Edge Detectr</a> application.</p>
+      
+      <h2>Available Endpoints</h2>
+      <ul>
+        <li><code>/health</code> - Health check endpoint</li>
+        <li><code>/api/operators/:operator</code> - Edge detection processing endpoint</li>
+      </ul>
+      
+      <h2>Documentation</h2>
+      <p>For more information, visit <a href="https://edgedetectr.com">our website</a>.</p>
+    </body>
+    </html>
+  `);
 });
 
 // Health check endpoint for load balancer
